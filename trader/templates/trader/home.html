@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html lang='en'>
-    <head>
-        <title>Trader App</title>
-    </head>
-    <body>
-        <h1>Welcome to Trader App</h1>
+
+<head>
+    <title>Trader App</title>
+    <style>
+        nav ul {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <span>
+            <h1>Trader App</h1>
+        </span>
         <div>
-            <a href="/">Home</a>
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="portfolio">Portfolio</a>
+                </li>
+                <li>
+                    <a href="stock">Stock Ticker</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            Welcome, {Username}
         </div>
         <div>
-            <a href="portfolio">Portfolio</a>
+            <a href="">Logout</a>
         </div>
-        <div>
-            <a href="stock">Stock Ticker</a>
-        </div>
-    </body>
+    </nav>
+    <hr>
+    <form action="">
+        <label for="stockSearch">Symbol:</label>
+        <input type="text" placeholder="stock symbol or name..." />
+        <button type="submit">Search</button>
+    </form>
+
+</body>
+
 </html>
