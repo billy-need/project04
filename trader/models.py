@@ -1,6 +1,15 @@
 from django.db import models
 
 # Create your models here.
-# need an Account model: id, username, password, balance
-    #this is how you login and needs to update when sell or buy stock
-# need a Stock model: id, symbol, name, shares (entered by user), price (calculated from info on finance), orderDate 
+class Account(models.Model):
+    id = models.UUIDField(primary_key=True);
+    userName = models.CharField(max_length=25);
+    password = models.CharField(max_length=25);
+    balance = models.DecimalField(max_digits=20, decimal_places=4);
+
+class Stock(models.Model):
+    id = models.UUIDField(primary_key=True);
+    symbol = models.CharField(max_length=5);
+    shares = models.IntegerField(); # entered by user
+    price = models.DecimalField(max_digits=10, decimal_places=2) # calculated from info on finance
+    orderDate = models.DateField();

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_list_or_404
 
 # Create your views here.
 def home(request):
-    return render(request, 'trader/home.html')
+    context = { 'username': 'Mike Zeno'}
+    return render(request, 'trader/home.html', context)
