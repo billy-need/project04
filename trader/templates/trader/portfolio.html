@@ -11,6 +11,12 @@
         a {
             text-decoration: none;
         }
+
+        td,
+        th {
+            padding: 0px 10px;
+            align-content: left;
+        }
     </style>
 </head>
 
@@ -43,19 +49,24 @@
     <br>
     <h3>Account Balance: {{balance}}</h3>
     <hr>
-    <h2>Stock Market</h2>
-    <form action="/stock" method="POST">
-        <table>
-            {% csrf_token %}
-            {{form.as_table}}
-            <tr>
-                <td colspan="2" align="center">
-                    <input type="submit" name="submit" value="Buy">
-                    <input type="submit" name="submit" value="Sell">
-                </td>
-            </tr>
-        </table>
-    </form>
+
+    <h2>Stock Portfolio</h2>
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Shares</th>
+            <th>Price</th>
+            <th>Order Date</th>
+        </tr>
+        {% for stock in portfolio %}
+        <tr>
+            <td>{{stock.symbol}}</td>
+            <td>{{stock.shares}}</td>
+            <td>{{stock.price}}</td>
+            <td>{{stock.orderDate}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </body>
 

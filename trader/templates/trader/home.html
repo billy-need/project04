@@ -25,14 +25,14 @@
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="portfolio">Portfolio</a>
+                    <a href="/stock">Stock Market</a>
                 </li>
                 <li>
-                    <a href="stock">Stock Ticker</a>
+                    <a href="/portfolio">Portfolio</a>
                 </li>
             </ul>
         </div>
-        
+
         <div>
             Welcome, {{username}}
         </div>
@@ -40,8 +40,12 @@
             <a href="">Logout</a>
         </div>
     </nav>
+    <br>
+    <h3>Account Balance: {{balance}}</h3>
     <hr>
+    <h2>Dashboard</h2>
     <form action="">
+        {% csrf_token %}
         <label for="stockSearch">Symbol:</label>
         <input type="text" placeholder="stock symbol or name..." />
         <button type="submit">Search</button>
