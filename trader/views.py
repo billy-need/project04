@@ -1,22 +1,20 @@
+from django.http import request
+from django.http.response import HttpResponse
 from trader.models import Stock
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from .forms import StockForm, TickerForm
+from .forms import StockForm, TickerForm, MyAjaxForm
 from .models import Account, Stock
+from .finance import getStockName
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout, login
 
 # Create your views here.
 def home(request):
     account = get_object_or_404(Account, pk = 1)
     balance = account.balance
     username = account.userName
-    context = { 'username': username, 'balance' : round(balance, 2)}
-    return render(request, 'trader/home.html', context)
-
-def ticker(request):
-    account = get_object_or_404(Account, pk = 1)
-    balance = account.balance
-    username = account.userName
-    form = TickerForm()
-    context = { 'username': username, 'balance' : round(balance, 2), 'form': form}
+    tickerForm = TickerForm()
+    context = { 'username': username, 'balance' : round(balance, 2), 'tickerForm' : tickerForm}
     return render(request, 'trader/home.html', context)
 
 def stock(request):
@@ -66,3 +64,14 @@ def portfolio(request):
     portfolio = Stock.objects.all()
     context = { 'portfolio': portfolio, 'username': username, 'balance' : round(balance, 2)}
     return render(request, 'trader/portfolio.html', context)
+
+def login_view(request):
+    user = authenticate(request, username='root', password='password123')
+    if user is not None:
+        print('username is authenticated')
+        login(request, user)
+        return redirect('/home2')
+
+def logout_view(request):
+    logout(request)
+    return redirect ('/home2')

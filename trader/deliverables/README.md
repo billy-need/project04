@@ -31,3 +31,13 @@ python manage.py runserver
 python manage.py makemigrations trader
 python manage.py migrate
 python manage.py shell
+
+pip install pandas
+pip install pandas-datareader
+pip install numpy
+pip install matplotlib
+pip install datetime
+pip install yfinance --upgrade --no-cache-dir
+
+python manage.py createsuperuser --username=root --email=root@abc.com
+password: password123
