@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.home),
     path('stock', views.stock),
     path('portfolio', views.portfolio),
-    path('findstock', finance.getStockName),
+    path('findstock', finance.getStock),
     path('login', views.login_view),
     path('logout', views.logout_view),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

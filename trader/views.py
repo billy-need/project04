@@ -2,9 +2,8 @@ from django.http import request
 from django.http.response import HttpResponse
 from trader.models import Stock
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from .forms import StockForm, TickerForm, MyAjaxForm
+from .forms import StockForm, TickerForm
 from .models import Account, Stock
-from .finance import getStockName
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 

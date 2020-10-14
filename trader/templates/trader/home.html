@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 
     <!-- Favicon -->
     <link href="../../static/favicon.ico" rel="icon" type="image/x-icon" />
@@ -28,7 +28,7 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
     {% load static %}
-    <script src="{% static 'app.js' %}"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 
 <body>
@@ -37,8 +37,6 @@
     <div id="page-container">
         <div id="content-wrap">
             <header>
-
-
                 <!-- Navigation Bar -->
                 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
                     <!-- Nav Logo -->
@@ -75,65 +73,53 @@
                         <a href="">Logout</a>
                     </div>
                 </nav>
-        </div>
-        </header>
+            </header>
 
-        <main>
-            <!-- Account Info -->
-            <section>
+            <main>
                 <div class="container">
-                    <br>
-                    <h4>Account Balance: ${{balance}}</h4>
-                    <hr>
-                </div>
-            </section>
-
-            <!-- Stock Search -->
-            <section>
-                <div class="container">
-                    <form action="">
-                        <legend>Stock Market</legend>
-                        <fieldset class="form-group">
-                            {% csrf_token %}
-                            <!-- <label for="stockInput">Stocks</label> -->
-                            <input class="form-control" type="text" id="stockInput" placeholder="Search">
-                        </fieldset>
-                        <button class="btn btn-primary" id="searchBtn" type="button">Search</button>
-
-                    </form>
-                </div>
-            </section>
-            <br><br>        
-            <!-- Stock Info -->
-            <section>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <div class="card border-secondary bg-light mb-3" id="stockOutput" style="max-width: 25rem;">
-                                <div class="card-header" id="stockSymbol">MSFT</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Account Info -->
+                            <h5>Account Balance: ${{balance}}</h5>
+                            <hr>
+                            <form action="">
+                                <legend>Stock Market</legend>
+                                <fieldset class="form-group">
+                                    {% csrf_token %}
+                                    <!-- <label for="stockInput">Stocks</label> -->
+                                    <input class="form-control" type="text" id="stockInput" placeholder="Search">
+                                </fieldset>
+                                <button class="btn btn-primary" id="searchBtn" type="button">Search</button>
+                            </form>
+                            <!-- Stock Info -->
+                            <div class="card border-secondary bg-light mb-3 hidden" id="stockOutput" style="max-width: 25rem;">
+                                <div class="card-header" id="stockSymbol"></div>
                                 <div class="card-body">
-                                    <h4 class="card-title" id="stockName">Name</h4>
-                                    <p class="card-text" id="stockPrice">$25.00</p>
+                                    <h4 class="card-title" id="stockName"></h4>
+                                    <h5 class="card-text">Price: $<span id="stockPrice"></span></h5>
+                                    <p class="card-text">Today: $<span id="stockToday"></span></p>
+                                    <p class="card-text">High: $<span id="stockHigh"></span></p>
+                                    <p class="card-text">Low: $<span id="stockLow"></span></p>
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-4">
+                            <h4>TABLE GOES HERE</h4>
+                        </div>
                     </div>
                 </div>
+            </main>
+        </div>
+    
+        <!-- Footer Wrap -->
+        <div id="footer">
+            <footer>
+                <div class="row justify-content-center">
+                </div>
+            </footer>
+        </div>
 
-            </section>
-        </main>
     </div>
-
-    <!-- Footer -->
-    <div id="footer">
-        <footer>
-            <div class="row justify-content-center">
-            </div>
-        </footer>
-    </div>
-
-
 </body>
 
 </html>

@@ -11064,3 +11064,9 @@ legend {
 .popover-title {
   border-bottom: none;
 }
+
+div.hidden
+{
+   display: none
+}
+
