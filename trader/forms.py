@@ -3,7 +3,7 @@ from .models import Stock
 
 class TickerForm(forms.Form):
     symbol = forms.CharField(widget=forms.TextInput(
-        attrs= {'id' : 'stockInput', 'placeholder' : 'Search'}
+        attrs= {'id' : 'stockInput', 'placeholder' : 'Symbol...'}
     ))
     # symbol = forms.CharField(initial='MSFT');
     # shares = forms.IntegerField(initial=10);

@@ -20,11 +20,6 @@
 'dayHigh': 225.13, 
 
 
-
-
-
- 
-
 // Averages
 'fiftyTwoWeekHigh': 232.86, 
 'twoHundredDayAverage': 195.93051, 

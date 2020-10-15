@@ -21,20 +21,20 @@ $(document).ready(() => {
         headers: { "X-CSRFToken": getCookie("csrftoken") },
     });
 
-    $(document).on('keypress',function(e) {
-        if(e.which == 13) {
+    $(document).on('keypress', function (e) {
+        if (e.which == 13) {
             $('#searchBtn').click()
         }
     });
 
+    // Search for stock by symbol
     $('#searchBtn').click(function () {
 
         // preparing payload
         var url = "/findstock";
         var stock = $("#stockInput").val();
         var data = "name=" + stock;
-        console.log("calling... " + url + " " + data);
-        
+
         // call to server
         $.ajax({
             type: "POST",
@@ -42,15 +42,14 @@ $(document).ready(() => {
             data: data
         })
 
-            .done(function (data) {
-                var json = $.parseJSON(data);
+            .done(function (resp) {
+                var json = $.parseJSON(resp);
                 $("#stockOutput").removeClass("hidden");
                 console.log("Response data:", json);
 
                 var price = json.price;
                 var prevClose = json.close;
                 var today = +((prevClose - price).toFixed(2));
-                console.log(today);
                 $("#stockName").text(json.name);
                 $("#stockSymbol").text(json.symbol);
                 $("#stockPrice").text(json.price);
@@ -64,11 +63,68 @@ $(document).ready(() => {
 
             })
 
-            .fail(function (data) {
-                console.log("Error:", data)
-                $("#stockName").text("ERROR: " + data)
+            .fail(function (resp) {
+                var result = $.parseJSON(resp);
+                console.log("Error:", result)
+                $("#stockName").text("Error: " + result)
             })
 
+    });
+
+    // Buy stocks
+    $('#buyBtn').click(() => {
+
+        // preparing payload
+        var url = "/buystock";
+
+        var data = {
+            symbol: $("#stockSymbol").text(),
+            shares: $("#stockShares").val(), //$("#stockInput").val()
+            price: $("#stockPrice").text()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log("Sucess: " + data)
+                $("#result").val(data);
+            },
+            error: function (data) {
+                console.log("Error: " + data)
+                $("#result").val("Something went wrong.")
+            }
+        })
+    });
+
+    // Buy stocks
+    $('#sellBtn').click(() => {
+
+        // preparing payload
+        var url = "/sellstock";
+
+        var data = {
+            symbol: $("#stockSymbol").text(),
+            shares: $("#stockShares").val(), //$("#stockInput").val()
+            price: $("#stockPrice").text()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log("Sucess: " + data)
+                $("#result").val(data);
+            },
+            error: function (data) {
+                console.log("Error: " + data)
+                $("#result").val("Something went wrong.")
+            }
+        })
     });
 
 });

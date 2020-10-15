@@ -17,7 +17,6 @@ def getStock(request):
     stockInfo = yf.Ticker(tickerSymbol).info
     stockDetails = getStockDetails(stockInfo)
     resp = json.dumps(stockDetails)
-    print(resp)
     return HttpResponse(resp)
 
 def getStockDetails(stockInfo):
