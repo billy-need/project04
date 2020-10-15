@@ -10,8 +10,6 @@ from django.contrib.auth import authenticate, logout, login
 import json
 
 # Create your views here.
-
-
 def home(request):
     account = get_object_or_404(Account, pk=1)
     balance = account.balance
@@ -23,7 +21,7 @@ def home(request):
 def drawGraph(request):
     tickerSymbol = request.POST['name']
     createPlot(tickerSymbol)
-    return redirect('/home')
+    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
 
 def getTransactions():
     transactions = Stock.objects.all()
@@ -33,8 +31,8 @@ def portfolio(request):
     account = get_object_or_404(Account, pk=1)
     balance = account.balance
     username = account.username
-    portfolio = Stock.objects.all()
-    context = {'portfolio': portfolio,'username': username, 'balance': round(balance, 2)}
+    transactions = getTransactions()
+    context = {'username': username, 'balance': round(balance, 2), 'transactions': transactions}
     return render(request, 'trader/portfolio.html', context)
 
 def account(request):
@@ -70,7 +68,7 @@ def buyStock(request):
             Stock.objects.create(symbol=symbol, shares=shares, price=price)
         else:
             print('Error: Insufficent Funds')  # create an error message screen
-    return redirect('/')
+    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
 
 def sellStock(request):
     account = get_object_or_404(Account, pk=1)
@@ -83,12 +81,12 @@ def sellStock(request):
         price = data['price']
         stocks = Stock.objects.filter(symbol=symbol)
         for stock in stocks:
-            if stock.shares > shares:
-                account.balance = balance + (float(price) * float(shares))
-                stock.shares = stock.shares - shares
+            if stock.shares > int(shares):
+                account.balance = balance + int((float(price)) * int(float(shares)))
+                stock.shares = stock.shares - int(float(shares))
                 stock.save()
-            elif stock.shares == shares:
-                account.balance = balance + (float(price) * float(shares))
+            elif stock.shares == int(shares):
+                account.balance = balance + int((float(price)) * int(float(shares)))
                 stock.delete()
             else:
                 print('Error: Cannot sell more than you own')

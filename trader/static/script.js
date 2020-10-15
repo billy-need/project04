@@ -131,7 +131,7 @@ $(document).ready(() => {
 
         // preparing payload
         var url = "/drawstock";
-        var stock = $("#stockSymbol").text()
+        var stock = $("#stockInput").val()
         var data = "name=" + stock;
 
         // call to server

@@ -83,9 +83,10 @@
                             <h5>Account Balance: ${{balance}}</h5>
                             <hr>
                             <div>
-                                <button class="btn btn-secondary" role="button">DRAW</button>
+                                <input class="form-control mr-sm-2" type="text" id="stockInput" placeholder="Symbol...">
+                                <button class="btn btn-secondary" role="button" id="drawBtn">Chart</button>
                             </div>
-                            <div id="plotOutput">
+                            <div class="hidden" id="plotOutput">
                                 {% load static %}
                                 <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
                             </div>
