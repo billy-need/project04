@@ -42,8 +42,8 @@
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
-                        <img src="{% static 'cookie.png' %}" height="75px" width="auto" alt="Logo" />
-                        Cookie Trader
+                        <img src="{% static 'logo.png' %}" height="75px" width="auto" alt="Logo" />
+                        Paper Trader
                     </div>
                     <!-- Toggle button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks"
@@ -110,6 +110,14 @@
                                     <button class="btn btn-danger" id="sellBtn" type="button">SELL</button>
                                     <div id="result"></div>
                                 </div>
+                                <div>
+                                    <button class="btn btn-secondary" role="button" id="drawBtn">Chart</button>
+                                </div>
+                            </div>
+
+                            <div class="hidden" id="plotOutput">
+                                {% load static %}
+                                <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
                             </div>
                         </div>
                         <div class="col-6 d-flex flex-column">

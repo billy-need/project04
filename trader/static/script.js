@@ -79,7 +79,7 @@ $(document).ready(() => {
 
         var data = {
             symbol: $("#stockSymbol").text(),
-            shares: $("#stockShares").val(), //$("#stockInput").val()
+            shares: $("#stockShares").val(),
             price: $("#stockPrice").text()
         }
 
@@ -90,16 +90,16 @@ $(document).ready(() => {
             data: JSON.stringify(data),
             success: function (data) {
                 console.log("Sucess: " + data)
-                $("#result").val(data);
+                $("#plotOutput").removeClass("hidden");
             },
             error: function (data) {
                 console.log("Error: " + data)
-                $("#result").val("Something went wrong.")
+                $("#result").val("Something went wrong.");
             }
         })
     });
 
-    // Buy stocks
+    // Sell stocks
     $('#sellBtn').click(() => {
 
         // preparing payload
@@ -107,7 +107,7 @@ $(document).ready(() => {
 
         var data = {
             symbol: $("#stockSymbol").text(),
-            shares: $("#stockShares").val(), //$("#stockInput").val()
+            shares: $("#stockShares").val(), 
             price: $("#stockPrice").text()
         }
 
@@ -126,5 +126,29 @@ $(document).ready(() => {
             }
         })
     });
+
+    $('#drawBtn').click(function () {
+
+        // preparing payload
+        var url = "/drawstock";
+        var stock = $("#stockSymbol").text()
+        var data = "name=" + stock;
+
+        // call to server
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function (data) {
+                console.log("Sucess: " + data)
+                $("#plotOutput").removeClass("hidden");
+            },
+            error: function (data) {
+                console.log("Error: " + data)
+            }
+        })
+
+    });
+    
 
 });

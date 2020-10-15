@@ -42,8 +42,8 @@
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
-                        <img src="{% static 'cookie.png' %}" height="75px" width="auto" alt="Logo" />
-                        Cookie Trader
+                        <img src="{% static 'logo.png' %}" height="75px" width="auto" alt="Logo" />
+                        Paper Trader
                     </div>
                     <!-- Toggle button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks"
@@ -53,11 +53,11 @@
                     <!-- Nav Links -->
                     <div class="collapse navbar-collapse" id="navbarLinks">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link active" aria-haspopup="true" href="/">Home</a>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-haspopup="true" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-haspopup="true" href="/portfolio">Portfolio</a>
+                                <a class="nav-link active" aria-haspopup="true" href="/portfolio">Portfolio</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" aria-haspopup="true" href="/account">Account</a>
@@ -82,35 +82,14 @@
                             <!-- Account Info -->
                             <h5>Account Balance: ${{balance}}</h5>
                             <hr>
-                            <form action="">
-                                <legend>Stock Market</legend>
-                                <fieldset class="form-inline">
-                                    {% csrf_token %}
-                                    <!-- <label for="stockInput">Stocks</label> -->
-                                    <input class="form-control mr-sm-2" type="text" id="stockInput" placeholder="Symbol...">
-                                    <button class="btn btn-primary my-2 my-sm-0" id="searchBtn" type="button">SEARCH</button>
-                                </fieldset>
-                                
-                            </form>
-                            <!-- Stock Info -->
-                            <div class="card border-secondary bg-light mb-3 hidden" id="stockOutput"
-                                style="max-width: 25rem;">
-                                <div class="card-header" id="stockSymbol"></div>
-                                <div class="card-body">
-                                    <h4 class="card-title" id="stockName"></h4>
-                                    <h5 class="card-text">Price: $<span id="stockPrice"></span></h5>
-                                    <p class="card-text">Today: $<span id="stockToday"></span></p>
-                                    <p class="card-text">High: $<span id="stockHigh"></span></p>
-                                    <p class="card-text">Low: $<span id="stockLow"></span></p>
-                                </div>
-                                <div id="tradeStock">
-                                    <label for="stockShares">Shares: </label>
-                                    <input type="number" id="stockShares" placeholder="0">
-                                    <button class="btn btn-success" id="buyBtn" type="button">BUY</button>
-                                    <button class="btn btn-danger" id="sellBtn" type="button">SELL</button>
-                                    <div id="result"></div>
-                                </div>
+                            <div>
+                                <button class="btn btn-secondary" role="button">DRAW</button>
                             </div>
+                            <div id="plotOutput">
+                                {% load static %}
+                                <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
+                            </div>
+                            
                         </div>
                         <div class="col-6 d-flex flex-column">
                             <table class="table table-hover ">
