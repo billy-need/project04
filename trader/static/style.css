@@ -11070,3 +11070,10 @@ div.hidden
    display: none
 }
 
+#welcome {
+  padding-right: 1rem;
+}
+
+#username {
+  color: white;
+}

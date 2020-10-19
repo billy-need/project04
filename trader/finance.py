@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 import json
 import os
 from django.conf import settings
@@ -14,20 +14,23 @@ from django.conf import settings
 #print(help(yf))
 
 # Get current stock information
-def getStock(request):
+def getStockData(request):
     tickerSymbol = request.POST['name']
 
     try:
         stockInfo = yf.Ticker(tickerSymbol).info
-        stockDetails = getStockDetails(stockInfo)
+        stockDetails = getStockDataDetails(stockInfo)
         resp = json.dumps(stockDetails)
         return HttpResponse(resp)
 
-    except RemoteDataError:
+    except RemoteDataError as e:
         print ('No data found for {}'.format(tickerSymbol))
 
+    except Exception as e:
+        print ('No data found for {}'.format(tickerSymbol) + e)
+
     
-def getStockDetails(stockInfo):
+def getStockDataDetails(stockInfo):
     return {
         'name': stockInfo['shortName'],
         'symbol': stockInfo['symbol'],
@@ -43,9 +46,9 @@ def getStockDetails(stockInfo):
     }
 
 # Get historical data to draw plot
-def createPlot(ticker):
-    newtime = yf.download(ticker, start = "2020-01-01", end = str(datetime.now().strftime('%Y-%m-%d')))
-    newtime['Adj Close'].plot()
+def stockPlot(ticker):
+    stocks = yf.download(ticker, start = "2020-01-01", end = str(datetime.now().strftime('%Y-%m-%d')))
+    stocks['Adj Close'].plot()
     plt.xlabel("Date")
     plt.ylabel("Price")
     plt.title(ticker + " Price YTD")
@@ -53,4 +56,15 @@ def createPlot(ticker):
     IMGDIR= os.path.join(settings.BASE_DIR,'trader\static')   
     print('savefig(' + IMGDIR + '\stock.png)')
     plt.savefig(IMGDIR + '\stock.png')
+    plt.close()
+
+def portfolioPlot(stocks):
+    stocks['Price'].plot()
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.title("Portfolio Value YTD")
+    #plt.show()
+    IMGDIR= os.path.join(settings.BASE_DIR,'trader\static')   
+    print('savefig(' + IMGDIR + '\portfolio.png)')
+    plt.savefig(IMGDIR + '\portfolio.png')
     plt.close()

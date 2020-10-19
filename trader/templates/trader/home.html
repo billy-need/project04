@@ -7,11 +7,9 @@
     <meta http-equiv="X-UA-Compatible" contect="IE=edge">
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
-    <title>Cookie Trader</title>
+    <title>Paper Trader</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
@@ -42,7 +40,7 @@
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
-                        <img src="{% static 'logo.png' %}" height="75px" width="auto" alt="Logo" />
+                        <img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" />
                         Paper Trader
                     </div>
                     <!-- Toggle button -->
@@ -66,8 +64,8 @@
                     </div>
 
                     <!-- User Login -->
-                    <div>
-                        Welcome, {{username}}
+                    <div id="welcome">
+                        Welcome, <span id="username">{{username}}</span>
                     </div>
                     <div>
                         <a href="">Logout</a>
@@ -89,6 +87,7 @@
                                     <!-- <label for="stockInput">Stocks</label> -->
                                     <input class="form-control mr-sm-2" type="text" id="stockInput" placeholder="Symbol...">
                                     <button class="btn btn-primary my-2 my-sm-0" id="searchBtn" type="button">SEARCH</button>
+                                    <button class="btn btn-secondary my-2 my-sm-0 ml-2" role="button" id="drawBtn">CHART</button>
                                 </fieldset>
                             </form>
                             <!-- Stock Info -->
@@ -108,9 +107,6 @@
                                     <button class="btn btn-success" id="buyBtn" type="button">BUY</button>
                                     <button class="btn btn-danger" id="sellBtn" type="button">SELL</button>
                                     <div id="result"></div>
-                                </div>
-                                <div>
-                                    <button class="btn btn-secondary" role="button" id="drawBtn">Chart</button>
                                 </div>
                             </div>
 

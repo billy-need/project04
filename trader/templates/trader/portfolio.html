@@ -7,11 +7,9 @@
     <meta http-equiv="X-UA-Compatible" contect="IE=edge">
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
-    <title>Cookie Trader</title>
+    <title>Paper Trader</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
@@ -42,7 +40,7 @@
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
-                        <img src="{% static 'logo.png' %}" height="75px" width="auto" alt="Logo" />
+                        <img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" />
                         Paper Trader
                     </div>
                     <!-- Toggle button -->
@@ -66,8 +64,8 @@
                     </div>
 
                     <!-- User Login -->
-                    <div>
-                        Welcome, {{username}}
+                    <div id="welcome">
+                        Welcome, <span id="username">{{username}}</span>
                     </div>
                     <div>
                         <a href="">Logout</a>
@@ -82,15 +80,10 @@
                             <!-- Account Info -->
                             <h5>Account Balance: ${{balance}}</h5>
                             <hr>
-                            <div>
-                                <input class="form-control mr-sm-2" type="text" id="stockInput" placeholder="Symbol...">
-                                <button class="btn btn-secondary" role="button" id="drawBtn">Chart</button>
-                            </div>
-                            <div class="hidden" id="plotOutput">
+                            <div id="portfolioPlot">
                                 {% load static %}
-                                <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
+                                <img src="{% static 'portfolio.png' %}" width="auto" alt="portfolio" />
                             </div>
-                            
                         </div>
                         <div class="col-6 d-flex flex-column">
                             <table class="table table-hover ">

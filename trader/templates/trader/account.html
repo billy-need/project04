@@ -7,11 +7,9 @@
     <meta http-equiv="X-UA-Compatible" contect="IE=edge">
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
-    <title>Cookie Trader</title>
+    <title>Paper Trader</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
@@ -42,7 +40,7 @@
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
-                        <img src="{% static 'logo.png' %}" height="75px" width="auto" alt="Logo" />
+                        <img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" />
                         Paper Trader
                     </div>
                     <!-- Toggle button -->
@@ -66,8 +64,8 @@
                     </div>
 
                     <!-- User Login -->
-                    <div>
-                        Welcome, {{username}}
+                    <div id="welcome">
+                        Welcome, <span id="username">{{username}}</span>
                     </div>
                     <div>
                         <a href="">Logout</a>

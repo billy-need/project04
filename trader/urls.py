@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from . import finance
+from .models import Transaction
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -9,9 +10,9 @@ urlpatterns = [
     path('', views.home),
     path('portfolio', views.portfolio),
     path('account', views.account),
-    path('findstock', finance.getStock),
+    path('findstock', finance.getStockData),
     path('drawstock', views.drawGraph),
-    path('transactions', views.getTransactions),
+    path('transactions', Transaction.getTransactions),
     path('buystock', views.buyStock),
     path('sellstock', views.sellStock),
     path('resetaccount', views.resetAccount),
