@@ -20,8 +20,9 @@ def home(request):
     if request.method == "POST":
         tickerSymbol = request.POST.get('ticker')
         stock = getStockData(tickerSymbol)
-        showOutput = True;
-        context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showOutput': showOutput, 'stock': stock}
+        showStock = True;
+        showPlot = True;
+        context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showStock': showStock, 'showPlot':showPlot, 'stock': stock}
         return render(request, 'trader/home.html', context)
     context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showOutput': showOutput}
     return render(request, 'trader/home.html', context)
