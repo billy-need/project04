@@ -1,3 +1,4 @@
+from typing import final
 from django.db import models
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 
@@ -16,9 +17,9 @@ class Account(models.Model):
         account = get_object_or_404(Account, pk=AccountId)
         return account
 
-    def resetBalance(AccountId):
-        account = Account.getAccount(AccountId)
-        account.balance = 10000.000
+    def resetBalance():
+        account = get_object_or_404(Account, pk=1)
+        account.balance = 10000.0000
         account.save()
 
 class Stock(models.Model):
@@ -27,6 +28,7 @@ class Stock(models.Model):
     shares = models.IntegerField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
+
     def __str__(self):
         return "symbol=" + str(self.symbol) + "name=" + str(self.name) + ", shares=" + str(self.shares)
 
@@ -34,14 +36,18 @@ class Stock(models.Model):
         stocks = Stock.objects.all()
         return stocks
 
-    def createStock(symbol, name, shares, accountId):
-        stocks = Stock.getStocks()
-        for stock in stocks:
-            if symbol == stock.symbol:
+    def createStock( ticker, name, shares, accountId):
+        try:
+            count = Stock.objects.filter(symbol=ticker).count()
+            if count >= 1:
+                stock = Stock.objects.get(symbol=ticker)
                 stock.shares += int(float(shares))
                 stock.save()
             else:
-                Stock.objects.create(symbol=symbol, name=name, shares=shares, account=accountId)
+                Stock.objects.create(symbol=ticker, name=name, shares=shares, account_id=accountId)
+        except Exception as e:
+            print('Error:', e)
+            
 
     def deleteStock(symbol, shares):
         stocks = Stock.getStocks()
@@ -61,13 +67,6 @@ class Stock(models.Model):
         stocks = Stock.getStocks()
         stocks.delete()
 
-    # def getStockValue(symbol): 
-#     stocks = Stock.objects.all()
-#     if symbol in stocks:
-#         shares = stocks[symbol].shares
-#         totalShares = sum(shares)
-#         return totalShares
-
 
 class Transaction(models.Model):
     orderType = models.CharField(max_length=4)
@@ -84,8 +83,8 @@ class Transaction(models.Model):
         transactions = Transaction.objects.all()
         return transactions
 
-    def createTransaction(orderType, symbol, shares, price, orderDate, accountId):
-        Transaction.objects.create(orderType=orderType, symbol=symbol, shares=shares, price=price, orderDate=orderDate, account=accountId)
+    def createTransaction(orderType, symbol, shares, price, accountId):
+        Transaction.objects.create(orderType=orderType, symbol=symbol, shares=shares, price=price, account_id=accountId)
 
     def deleteAllTransactions():
         transactions = Transaction.getTransactions()

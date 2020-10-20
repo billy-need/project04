@@ -27,49 +27,49 @@ $(document).ready(() => {
         }
     });
 
-    // Search for stock by symbol
-    $('#searchBtn').click(function () {
+    // Search for stock data by symbol
+    // $('#searchBtn').click(function () {
 
-        // preparing payload
-        var url = "/findstock";
-        var stock = $("#stockInput").val();
-        var data = "name=" + stock;
+    //     // preparing payload
+    //     var url = "/findstock";
+    //     var stock = $("#stockInput").val();
+    //     var data = "name=" + stock;
 
-        // call to server
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: data
-        })
+    //     // call to server
+    //     $.ajax({
+    //         method: "POST",
+    //         url: url,
+    //         data: data
+    //     // data: { csrfmiddlewaretoken: '{{ csrf_token }}'}
+    //     }).done(function (resp) {
+    //         var json = $.parseJSON(resp);
+    //         $("#stockOutput").removeClass("hidden");
+    //         console.log("Response data:", json);
 
-            .done(function (resp) {
-                var json = $.parseJSON(resp);
-                $("#stockOutput").removeClass("hidden");
-                console.log("Response data:", json);
+    //         var price = json.price;
+    //         var prevClose = json.close;
+    //         var today = +((prevClose - price).toFixed(2));
+    //         $("#stockName").text(json.name);
+    //         $("#stockSymbol").text(json.symbol);
+    //         $("#stockPrice").text(json.price);
+    //         $("#stockToday").text(today);
+    //         $("#stockHigh").text(json.high);
+    //         $("#stockLow").text(json.low);
+    //         //console.log('removing hidden from plotOuptut')
+    //         //$("#plotOutput").removeClass("hidden")
+    //         // $("#stockVolume").text(json.volume);
+    //         // $("#stockCap").text(json.marketCap);
+    //         // $("#stockfiftyTwoHigh").text(json.fiftyTwoHigh);
+    //         // $("#stockfiftyTwoLow").text(json.fiftyTwoLow);
 
-                var price = json.price;
-                var prevClose = json.close;
-                var today = +((prevClose - price).toFixed(2));
-                $("#stockName").text(json.name);
-                $("#stockSymbol").text(json.symbol);
-                $("#stockPrice").text(json.price);
-                $("#stockToday").text(today);
-                $("#stockHigh").text(json.high);
-                $("#stockLow").text(json.low);
-                // $("#stockVolume").text(json.volume);
-                // $("#stockCap").text(json.marketCap);
-                // $("#stockfiftyTwoHigh").text(json.fiftyTwoHigh);
-                // $("#stockfiftyTwoLow").text(json.fiftyTwoLow);
+    //     }).fail(function (resp) {
+    //         var json = $.parseJSON(resp);
+    //         console.log("Error:", json)
+    //         $("#stockName").text("Error: " + json)
+    //     })
 
-            })
+    // });
 
-            .fail(function (resp) {
-                var result = $.parseJSON(resp);
-                console.log("Error:", result)
-                $("#stockName").text("Error: " + result)
-            })
-
-    });
 
     // Buy stocks
     $('#buyBtn').click(() => {
@@ -79,22 +79,27 @@ $(document).ready(() => {
 
         var data = {
             symbol: $("#stockSymbol").text(),
+            name: $("#stockName").text(),
             shares: $("#stockShares").val(),
             price: $("#stockPrice").text()
         }
-
+        console.log("About to send buystock in ajax...")
         $.ajax({
             type: "POST",
             url: url,
             dataType: 'json',
             data: JSON.stringify(data),
-            success: function (data) {
-                console.log("Sucess: " + data)
-                $("#plotOutput").removeClass("hidden");
+            success: function (resp) {
+                console.log('Success: ' + resp.message);
+                location.reload();
+
+                var output = $('#output')
+                var s = "<h1>" + resp.message + "</h1>"
+                output.html(s)
+                
             },
-            error: function (data) {
-                console.log("Error: " + data)
-                $("#result").val("Something went wrong.");
+            error: function (resp) {
+                console.log(resp)
             }
         })
     });
@@ -116,39 +121,24 @@ $(document).ready(() => {
             url: url,
             dataType: 'json',
             data: JSON.stringify(data),
-            success: function (data) {
-                console.log("Sucess: " + data)
-                $("#result").val(data);
+            success: function (resp) {
+                console.log('Success: ' + resp);
+
+                // var json = $.parseJSON(resp);
+                // console.log("Sucess: " + json);
+                // $("#result").val(json);
             },
-            error: function (data) {
-                console.log("Error: " + data)
-                $("#result").val("Something went wrong.")
+            error: function (resp) {
+                console.log("Error when trying to sell")
+
+                // var json = $.parseJSON(resp);
+                // console.log("Error: " + json)
+                // $("#result").val("Something went wrong.")
             }
         })
     });
 
-    $('#drawBtn').click(function () {
 
-        // preparing payload
-        var url = "/drawstock";
-        var stock = $("#stockInput").val()
-        var data = "name=" + stock;
-
-        // call to server
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: data,
-            success: function (data) {
-                console.log("Sucess: " + data)
-                $("#plotOutput").removeClass("hidden");
-            },
-            error: function (data) {
-                console.log("Error: " + data)
-            }
-        })
-
-    });
     
 
 });

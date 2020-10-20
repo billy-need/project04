@@ -9,44 +9,42 @@ from django.http.response import HttpResponse, JsonResponse
 import json
 import os
 from django.conf import settings
+from decimal import Decimal
 
 #print(dir(yf))
 #print(help(yf))
 
-# Get current stock information
-def getStockData(request):
-    tickerSymbol = request.POST['name']
-
+def getStockData(tickerSymbol):
     try:
         stockInfo = yf.Ticker(tickerSymbol).info
-        stockDetails = getStockDataDetails(stockInfo)
-        resp = json.dumps(stockDetails)
-        return HttpResponse(resp)
+        stockPlot(tickerSymbol)
+        today = Decimal(stockInfo['previousClose'] - stockInfo['regularMarketPrice']).quantize(Decimal("0.01"))
+        return {
+            'name': stockInfo['shortName'],
+            'symbol': stockInfo['symbol'],
+            'price': stockInfo['regularMarketPrice'],
+            'today': today,
+            'close': stockInfo['previousClose'],
+            'high': stockInfo['dayHigh'],
+            'low': stockInfo['dayLow'],
+            'fiftyTwoHigh': stockInfo['fiftyTwoWeekHigh'],
+            'fiftyTwoLow': stockInfo['fiftyTwoWeekLow'],
+            'volume': stockInfo['volume'],
+            'marketCap': stockInfo['marketCap'],
+            'logo_url': stockInfo['logo_url']
+        }
+
 
     except RemoteDataError as e:
         print ('No data found for {}'.format(tickerSymbol))
 
     except Exception as e:
-        print ('No data found for {}'.format(tickerSymbol) + e)
+        print ('No data found for heres exception {}'.format(tickerSymbol) + str(e))
 
-    
-def getStockDataDetails(stockInfo):
-    return {
-        'name': stockInfo['shortName'],
-        'symbol': stockInfo['symbol'],
-        'price': stockInfo['regularMarketPrice'],
-        'close': stockInfo['previousClose'],
-        'high': stockInfo['dayHigh'],
-        'low': stockInfo['dayLow'],
-        'fiftyTwoHigh': stockInfo['fiftyTwoWeekHigh'],
-        'fiftyTwoLow': stockInfo['fiftyTwoWeekLow'],
-        'volume': stockInfo['volume'],
-        'marketCap': stockInfo['marketCap'],
-        'logo_url': stockInfo['logo_url']
-    }
 
 # Get historical data to draw plot
 def stockPlot(ticker):
+    ticker = ticker.upper()
     stocks = yf.download(ticker, start = "2020-01-01", end = str(datetime.now().strftime('%Y-%m-%d')))
     stocks['Adj Close'].plot()
     plt.xlabel("Date")

@@ -5,7 +5,7 @@ from trader.models import Stock
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from .forms import StockForm, TickerForm
 from .models import Account, Stock, Transaction
-from .finance import stockPlot, portfolioPlot
+from .finance import getStockData, stockPlot
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 import json
@@ -15,14 +15,16 @@ def home(request):
     account = Account.getAccount(1)
     balance = account.balance
     username = account.username
-    transactions = Transaction.getTransactions()
-    context = {'username': username, 'balance': round(balance, 2), 'transactions': transactions}
+    stocks = Stock.getStocks()
+    showOutput = False
+    if request.method == "POST":
+        tickerSymbol = request.POST.get('ticker')
+        stock = getStockData(tickerSymbol)
+        showOutput = True;
+        context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showOutput': showOutput, 'stock': stock}
+        return render(request, 'trader/home.html', context)
+    context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showOutput': showOutput}
     return render(request, 'trader/home.html', context)
-
-def drawGraph(request): #multi thread bug!!!
-    tickerSymbol = request.POST['name']
-    stockPlot(tickerSymbol)
-    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
 
 def portfolio(request):  #needs work
     account = Account.getAccount(1)
@@ -38,11 +40,13 @@ def account(request):
     balance = account.balance
     username = account.username
     password = account.password
-    context = {'username': username, 'password': password, 'balance': round(balance, 2)}
+    firstname = account.first_name
+    lastname = account.last_name
+    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2)}
     return render(request, 'trader/account.html', context)
 
-def resetAccount(userId = 1):
-    Account.resetBalance(userId)
+def resetAccount(request):
+    Account.resetBalance()
     Stock.deleteAllStock()
     Transaction.deleteAllTransactions()
     return redirect('/account')
@@ -51,11 +55,11 @@ def resetAccount(userId = 1):
 def buyStock(request):
     account = Account.getAccount(1)
     balance = account.balance
-
+    resp = {}
+    
     try:
         if request.method == "POST":
             data = json.loads(request.body)
-            print("Json=" + str(data))
             symbol = data['symbol']
             name = data['name']
             shares = data['shares']
@@ -64,18 +68,23 @@ def buyStock(request):
                 account.balance = balance - int(float(price)) * int(float(shares))
                 account.save()
                 Stock.createStock(symbol, name, shares, accountId = 1)
-                Transaction.createTransaction('buy', symbol, shares, price, accountId = 1)
+                Transaction.createTransaction('Buy', symbol, shares, price, accountId = 1)
+                resp['result'] = 'Success'
+                resp['message'] = 'You have successfully ordered shares'
             else:
-                print(str('Error: Insufficent Funds'))  # create an error message screen
-        return HttpResponseRedirect('/')
-    
+                resp['result'] = 'Failure'
+                resp['message'] = 'Insufficent Funds'
+        return JsonResponse(resp)
+
     except Exception as e:
-        print(str(e))
-        return HttpResponseBadRequest(e)
+        resp['result'] = 'Error'
+        resp['message'] = e
+        return JsonResponse(resp)
 
 def sellStock(request):
     account = Account.getAccount(1)
     balance = account.balance
+    resp = {}
 
     try:
         if request.method == "POST":
@@ -84,14 +93,18 @@ def sellStock(request):
             symbol = data['symbol']
             shares = data['shares']
             price = data['price']
-            Stock.deleteStock(symbol, shares)
             account.balance = balance + int((float(price)) * int(float(shares)))
             account.save()
-        return HttpResponseRedirect('/')
+            Stock.deleteStock(symbol, shares)
+            Transaction.createTransaction('Buy', symbol, shares, price, accountId = 1)
+            resp['result'] = 'Success'
+            resp['message'] = 'You have successfully ordered shares'
+        return JsonResponse(resp)
 
     except Exception as e:
-        print(str(e))
-        return HttpResponseBadRequest(e)
+        resp['result'] = 'Error'
+        resp['message'] = e
+        return JsonResponse(resp)
 
 
 def login_view(request):

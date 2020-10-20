@@ -11077,3 +11077,8 @@ div.hidden
 #username {
   color: white;
 }
+
+#stockOutput {
+  margin-top: 3rem;
+}
+

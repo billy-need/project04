@@ -80,26 +80,25 @@
                             <!-- Account Info -->
                             <h5>Account Balance: ${{balance}}</h5>
                             <hr>
-                            <form action="">
+                            <form action="/getstock" method="POST">
                                 <legend>Stock Market</legend>
                                 <fieldset class="form-inline">
                                     {% csrf_token %}
-                                    <!-- <label for="stockInput">Stocks</label> -->
-                                    <input class="form-control mr-sm-2" type="text" id="stockInput" placeholder="Symbol...">
-                                    <button class="btn btn-primary my-2 my-sm-0" id="searchBtn" type="button">SEARCH</button>
-                                    <button class="btn btn-secondary my-2 my-sm-0 ml-2" role="button" id="drawBtn">CHART</button>
+                                    <input class="form-control mr-sm-2" type="text" id="stockInput" name="ticker" placeholder="Symbol..." />
+                                    <button class="btn btn-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit" name="submit">SEARCH</button>
                                 </fieldset>
                             </form>
                             <!-- Stock Info -->
-                            <div class="card border-secondary bg-light mb-3 hidden" id="stockOutput"
+                            {% if showOutput == True  %}
+                            <div class="card border-secondary bg-light mb-3 " id="stockOutput"
                                 style="max-width: 25rem;">
-                                <div class="card-header" id="stockSymbol"></div>
+                                <div class="card-header" id="stockSymbol">{{stock.symbol}}</div>
                                 <div class="card-body">
-                                    <h4 class="card-title" id="stockName"></h4>
-                                    <h5 class="card-text">Price: $<span id="stockPrice"></span></h5>
-                                    <p class="card-text">Today: $<span id="stockToday"></span></p>
-                                    <p class="card-text">High: $<span id="stockHigh"></span></p>
-                                    <p class="card-text">Low: $<span id="stockLow"></span></p>
+                                    <h4 class="card-title" id="stockName">{{stock.name}}</h4>
+                                    <h5 class="card-text">Price: $<span id="stockPrice">{{stock.price}}</span></h5>
+                                    <p class="card-text">Today: $<span id="stockToday">{{stock.today}}</span></p>
+                                    <p class="card-text">High: $<span id="stockHigh">{{stock.high}}</span></p>
+                                    <p class="card-text">Low: $<span id="stockLow">{{stock.low}}</span></p>
                                 </div>
                                 <div id="tradeStock">
                                     <label for="stockShares">Shares: </label>
@@ -109,29 +108,31 @@
                                     <div id="result"></div>
                                 </div>
                             </div>
-
-                            <div class="hidden" id="plotOutput">
+                            <div id="plotOutput">
                                 {% load static %}
                                 <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
                             </div>
+
+                            <div id="output">
+
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="col-6 d-flex flex-column">
                             <table class="table table-hover ">
                                 <thead>
                                     <tr>
                                         <th scope="col">Symbol</th>
+                                        <th scope="col">Name</th>
                                         <th scope="col">Shares</th>
-                                        <th scope="col">Value</th>
-                                        <th scope="col">Order Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for stock in transactions %}
+                                    {% for stock in stocks %}
                                     <tr>
                                         <td>{{stock.symbol}}</td>
+                                        <td>{{stock.name}}</td>
                                         <td>{{stock.shares}}</td>
-                                        <td>{{stock.price}}</td>
-                                        <td>{{stock.orderDate}}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

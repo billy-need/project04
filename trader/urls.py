@@ -10,8 +10,8 @@ urlpatterns = [
     path('', views.home),
     path('portfolio', views.portfolio),
     path('account', views.account),
-    path('findstock', finance.getStockData),
-    path('drawstock', views.drawGraph),
+    path('getstock', views.home),
+    #path('ajax/getStockData', views.getStockData)
     path('transactions', Transaction.getTransactions),
     path('buystock', views.buyStock),
     path('sellstock', views.sellStock),
