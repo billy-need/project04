@@ -34,29 +34,23 @@
     <!-- Page Container -->
     <div id="page-container">
         <div id="content-wrap">
-
+            
             <!-- Navigation Bar -->
             <nav class="navbar navbar-dark bg-dark navbar-expand-lg" style="border-radius: 0;">
                 <div class="navbar-header">
-
                     <!-- Nav Logo -->
                     <div class="navbar-brand">
                         {% load static %}
                         <a href="/"><img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" /></a>
                         Paper Trader
                     </div>
-
                     <!-- Toggle button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-
                 </div>
-
-
                 <!-- Nav Links -->
                 <div class="collapse navbar-collapse" id="navbarLinks">
-
                         <ul class="navbar-nav mr-auto">  <!-- Controls horizontal of Search -->
                         <li class="nav-item active">
                             <a class="nav-link" aria-haspopup="true" href="/">Home</a>
@@ -68,16 +62,13 @@
                             <a class="nav-link" aria-haspopup="true" href="/account">Account</a>
                         </li>
                     </ul>
-
                     <!-- Search Form -->
                     <form class="form-inline mr-auto" id="search" role="search" action="/getstock" method="POST">
                         {% csrf_token %}
                         <input class="form-control mr-sm-1" type="text" id="stockInput" name="ticker" placeholder="Symbol..." />
                         <button class="btn btn-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit" name="submit">SEARCH</button>
                     </form>
-
                     <!-- User Login -->
-
                     <div class="navbar-text">
                         <span>Welcome, </span> 
                         <span id="username">{{username}}</span> 
@@ -86,7 +77,7 @@
                 </div>
             </nav>
 
-
+            <!-- Page Content -->
             <main>
                 <div class="container">
                     <div class="row justify-content-around">
