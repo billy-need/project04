@@ -7,10 +7,9 @@ from django.conf.urls.static import static
 
 # back-end router
 urlpatterns = [
-    path('', views.home),
-    path('portfolio', views.portfolio),
+    path('', views.portfolio),
     path('account', views.account),
-    path('getstock', views.home),
+    path('getstock', views.portfolio),
     #path('ajax/getStockData', views.getStockData)
     path('transactions', Transaction.getTransactions),
     path('buystock', views.buyStock),

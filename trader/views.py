@@ -11,29 +11,38 @@ from django.contrib.auth import authenticate, logout, login
 import json
 
 # Create your views here.
-def home(request):
+def portfolio(request):
     account = Account.getAccount(1)
     balance = account.balance
     username = account.username
     stocks = Stock.getStocks()
-    showOutput = False
+    showPortfolio = True
+    showStock = False
+    showPlot = False
     if request.method == "POST":
         tickerSymbol = request.POST.get('ticker')
         stock = getStockData(tickerSymbol)
-        showStock = True;
-        showPlot = True;
-        context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showStock': showStock, 'showPlot':showPlot, 'stock': stock}
-        return render(request, 'trader/home.html', context)
-    context = {'username': username, 'balance': round(balance, 2), 'stocks': stocks, 'showOutput': showOutput}
-    return render(request, 'trader/home.html', context)
-
-def portfolio(request):  #needs work
-    account = Account.getAccount(1)
-    balance = account.balance
-    username = account.username
-    transactions = Transaction.getTransactions()
-    # portfolioPlot(transactions)
-    context = {'username': username, 'balance': round(balance, 2), 'transactions': transactions}
+        showPortfolio = False
+        showStock = True
+        showPlot = True
+        context = {
+            'username': username, 
+            'balance': round(balance, 2), 
+            'stocks': stocks, 
+            'showStock': showStock, 
+            'showPlot': showPlot, 
+            'showPortfolio' : showPortfolio, 
+            'stock': stock
+            }
+        return render(request, 'trader/portfolio.html', context)
+    context = {
+        'username': username, 
+        'balance': round(balance, 2), 
+        'stocks': stocks, 
+        'showStock': showStock,
+        'showPlot':  showPlot,
+        'showPortfolio' : showPortfolio
+        }
     return render(request, 'trader/portfolio.html', context)
 
 def account(request):
@@ -43,7 +52,8 @@ def account(request):
     password = account.password
     firstname = account.first_name
     lastname = account.last_name
-    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2)}
+    transactions = Transaction.getTransactions()
+    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2), 'transactions': transactions}
     return render(request, 'trader/account.html', context)
 
 def resetAccount(request):
