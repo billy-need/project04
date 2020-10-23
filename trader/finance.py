@@ -1,7 +1,9 @@
 import yfinance as yf
 from pandas_datareader import data
 from pandas_datareader._utils import RemoteDataError
+import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import pandas as pd
 import numpy as np
 from datetime import date, datetime, timedelta
@@ -61,10 +63,11 @@ def stockPlot(ticker):
     ticker = ticker.upper()
     stocks = yf.download(ticker, start = '2020-01-01', end = str(datetime.now().strftime('%Y-%m-%d')))
     stocks['Adj Close'].plot()
-    plt.xlabel("Date")
-    plt.ylabel("Price")
+    plt.tick_params(axis='x', colors='white')
+    plt.tick_params(axis='y', colors='white')
+    plt.xlabel("Date").set_color("white")
+    plt.ylabel("Price").set_color("white")
     plt.title(ticker + " Price YTD")
-    #plt.show()
     IMGDIR= os.path.join(settings.BASE_DIR,'trader\static')   
     print('savefig(' + IMGDIR + '\stock.png)')
     plt.savefig(IMGDIR + '\stock.png', transparent=True)
@@ -75,7 +78,6 @@ def portfolioPlot(stocks):
     plt.xlabel("Date")
     plt.ylabel("Price")
     plt.title("Portfolio Value YTD")
-    #plt.show()
     IMGDIR= os.path.join(settings.BASE_DIR,'trader\static')   
     print('savefig(' + IMGDIR + '\portfolio.png)')
     plt.savefig(IMGDIR + '\portfolio.png')
