@@ -75,22 +75,50 @@
 
             <!-- Page Content -->
             <div class="container">
-                <div class="row justify-content-around">
+                <div class="row justify-content-center">
                     <div class="col-7">
                         <!-- Account Balance -->
                         <h5>Account Balance: ${{balance}}</h5>
                         <hr>
                         {% if showPlot == True  %}
-                        <div id="plotOutput">
+                        <div class="plot">
                             {% load static %}
                             <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
                         </div>
+                        <ul class="nav nav-pills-dark nav-fill">
+                            <li class="nav-item">
+                              <a class="nav-link active" href="#">1 Week</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1 Month</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1 Year</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">All Time</a>
+                            </li>
+                        </ul>
                         {% endif %}
                         {% if showPortfolio == True  %}
-                        <div id="plotOutput">
+                        <div class="plot">
                             {% load static %}
-                            <img src="{% static 'portfolio.png' %}" width="auto" alt="stock" />
+                            <img src="{% static 'portfolio.png' %}" width="auto" alt="portfolio" />
                         </div>
+                        <ul class="nav nav-pills nav-fill">
+                            <li class="nav-item">
+                              <a class="nav-link active" href="#">1 Week</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1 Month</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#">1 Year</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">All Time</a>
+                            </li>
+                        </ul>
                         {% endif %}
 
                     </div>

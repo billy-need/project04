@@ -6,12 +6,13 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render, redirec
 from .forms import StockForm, TickerForm
 from .models import Account, Stock, Transaction
 from .finance import getStockData, stockPlot
+from .dates import getDate
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 import json
 
 # Create your views here.
-def portfolio(request):
+def home(request):
     account = Account.getAccount(1)
     balance = account.balance
     username = account.username
@@ -21,7 +22,9 @@ def portfolio(request):
     showPlot = False
     if request.method == "POST":
         tickerSymbol = request.POST.get('ticker')
-        stock = getStockData(tickerSymbol)
+        startDate = getDate('week')
+        endDate = getDate()
+        stock = getStockData(tickerSymbol, startDate, endDate)
         showPortfolio = False
         showStock = True
         showPlot = True
@@ -34,7 +37,7 @@ def portfolio(request):
             'showPortfolio' : showPortfolio, 
             'stock': stock
             }
-        return render(request, 'trader/portfolio.html', context)
+        return render(request, 'trader/home.html', context)
     context = {
         'username': username, 
         'balance': round(balance, 2), 
@@ -43,7 +46,7 @@ def portfolio(request):
         'showPlot':  showPlot,
         'showPortfolio' : showPortfolio
         }
-    return render(request, 'trader/portfolio.html', context)
+    return render(request, 'trader/home.html', context)
 
 def account(request):
     account = Account.getAccount(1)
