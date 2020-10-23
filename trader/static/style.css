@@ -11070,15 +11070,20 @@ div.hidden
    display: none
 }
 
-#welcome {
-  padding-right: 1rem;
-}
-
 #username {
   color: white;
+  margin-right: 1rem;
+}
+
+#logout a {
+  color: #2a9fd6;
 }
 
 #stockOutput {
   margin-top: 3rem;
 }
 
+#search{
+  display:block;
+  text-align:center;
+}
