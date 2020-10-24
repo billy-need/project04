@@ -21,11 +21,11 @@ $(document).ready(() => {
         headers: { "X-CSRFToken": getCookie("csrftoken") },
     });
 
-    $(document).on('keypress', function (e) {
-        if (e.which == 13) {
-            $('#searchBtn').click()
-        }
-    });
+    // $(document).on('keypress', function (e) {
+    //     if (e.which == 13) {
+    //         $('#searchBtn').click()
+    //     }
+    // });
 
     // Search for stock data by symbol
     // $('#searchBtn').click(function () {
@@ -83,7 +83,7 @@ $(document).ready(() => {
             shares: $("#stockShares").val(),
             price: $("#stockPrice").text()
         }
-        console.log("About to send buystock in ajax...")
+
         $.ajax({
             type: "POST",
             url: url,
@@ -91,15 +91,20 @@ $(document).ready(() => {
             data: JSON.stringify(data),
             success: function (resp) {
                 console.log('Success: ' + resp.message);
-                location.reload();
+                //location.reload();
+                
+                // var output = $('#output')
+                // var s = "<h1>" + resp.message + "</h1>"
+                // output.html(s)
 
-                var output = $('#output')
-                var s = "<h1>" + resp.message + "</h1>"
-                output.html(s)
+                $("#stockShares").val("")
+                $("#result").text(resp.message)
                 
             },
             error: function (resp) {
-                console.log(resp)
+                console.log("Error: " + resp)
+                $("#stockShares").val("")
+                $("#result").text(resp.message)
             }
         })
     });
@@ -122,18 +127,14 @@ $(document).ready(() => {
             dataType: 'json',
             data: JSON.stringify(data),
             success: function (resp) {
-                console.log('Success: ' + resp);
-
-                // var json = $.parseJSON(resp);
-                // console.log("Sucess: " + json);
-                // $("#result").val(json);
+                console.log('Success: ' + resp.message);
+                $("#stockShares").val("")
+                $("#result").text(resp.message)
             },
             error: function (resp) {
-                console.log("Error when trying to sell")
-
-                // var json = $.parseJSON(resp);
-                // console.log("Error: " + json)
-                // $("#result").val("Something went wrong.")
+                console.log("Error: " + resp)
+                $("#stockShares").val("")
+                $("#result").text(resp.message)
             }
         })
     });

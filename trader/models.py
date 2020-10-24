@@ -32,36 +32,22 @@ class Stock(models.Model):
     def __str__(self):
         return "symbol=" + str(self.symbol) + "name=" + str(self.name) + ", shares=" + str(self.shares)
 
+    def getStock(ticker):
+        stock = Stock.objects.get(symbol=ticker)
+        return stock
+
     def getStocks():
         stocks = Stock.objects.all()
         return stocks
 
     def createStock( ticker, name, shares, accountId):
-        try:
-            count = Stock.objects.filter(symbol=ticker).count()
-            if count >= 1:
-                stock = Stock.objects.get(symbol=ticker)
-                stock.shares += int(float(shares))
-                stock.save()
-            else:
-                Stock.objects.create(symbol=ticker, name=name, shares=shares, account_id=accountId)
-        except Exception as e:
-            print('Error:', e)
-            
-
-    def deleteStock(ticker, shares):
         count = Stock.objects.filter(symbol=ticker).count()
         if count >= 1:
             stock = Stock.objects.get(symbol=ticker)
-            if stock.shares > int(float(shares)):
-                stock.shares -= int(float(shares))
-                stock.save()
-            elif stock.shares == int(float(shares)):
-                stock.delete()
-            else:
-                return str('Cannot sell more than you own')
+            stock.shares += int(float(shares))
+            stock.save()
         else:
-            return str('You own no shares')
+            Stock.objects.create(symbol=ticker, name=name, shares=shares, account_id=accountId)
 
     def deleteAllStock():
         stocks = Stock.getStocks()

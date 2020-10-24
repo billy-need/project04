@@ -105,7 +105,7 @@ def buyStock(request):
                 Stock.createStock(symbol, name, shares, accountId = 1)
                 Transaction.createTransaction('Buy', symbol, shares, price, accountId = 1)
                 resp['result'] = 'Success'
-                resp['message'] = 'You have successfully ordered shares'
+                resp['message'] = 'Successfully ordered {} shares of {}!'.format(shares, symbol)
             else:
                 resp['result'] = 'Failure'
                 resp['message'] = 'Insufficent Funds'
@@ -128,12 +128,21 @@ def sellStock(request):
             symbol = data['symbol']
             shares = data['shares']
             price = data['price']
-            account.balance = balance + int((float(price)) * int(float(shares)))
-            account.save()
-            Stock.deleteStock(symbol, shares)
-            Transaction.createTransaction('Buy', symbol, shares, price, accountId = 1)
-            resp['result'] = 'Success'
-            resp['message'] = 'You have successfully ordered shares'
+            stock = Stock.getStock(symbol)
+            if stock.shares >= int(float(shares)):
+                if stock.shares > int(float(shares)):
+                    stock.shares -= int(float(shares))
+                    stock.save()
+                elif stock.shares == int(float(shares)):
+                    stock.delete()
+                account.balance = balance + int((float(price)) * int(float(shares)))
+                account.save()
+                Transaction.createTransaction('Sell', symbol, shares, price, accountId = 1)
+                resp['result'] = 'Success'
+                resp['message'] = 'Successfully sold {} shares of {}!'.format(shares, symbol)
+            else:
+                resp['result'] = 'Failure'
+                resp['message'] = 'Cannot sell more shares than you own.'
         return JsonResponse(resp)
 
     except Exception as e:
