@@ -44,13 +44,14 @@
                         <a href="/"><img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" /></a>
                     </div>
                     <!-- Toggle button -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks"
+                        aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
                 <!-- Nav Links -->
                 <div class="collapse navbar-collapse" id="navbarLinks">
-                        <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" aria-haspopup="true" href="/">Portfolio</a>
                         </li>
@@ -59,17 +60,19 @@
                         </li>
                     </ul>
                     <!-- Search Form -->
-                    <form class="form-inline mr-auto" id="search" role="search" action="/getstock" method="POST">
+                    <form class="form-inline mr-auto" id="search" role="search" action="/stock" method="POST">
                         {% csrf_token %}
-                        <input class="form-control mr-sm-1" type="text" id="stockInput" name="ticker" placeholder="Symbol..." />
-                        <button class="btn btn-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit" name="submit">SEARCH</button>
+                        <input class="form-control mr-sm-1" type="text" id="stockInput" name="ticker"
+                            placeholder="Symbol..." />
+                        <button class="btn btn-outline-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit"
+                            name="submit">Search</button>
                     </form>
                     <!-- User Login -->
                     <div class="navbar-text">
-                        <span>Welcome, </span> 
-                        <span id="username">{{username}}</span> 
+                        <span>Welcome, </span>
+                        <span id="username">{{username}}</span>
                         <span id="logout"><a href="">Logout</a></span>
-                    </div> 
+                    </div>
                 </div>
             </nav>
 
@@ -77,43 +80,52 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-7">
-                        <!-- Account Balance -->
-                        <h5>Account Balance: ${{balance}}</h5>
-                        <hr>
                         {% if showPlot == True  %}
+                        <!-- Stock Summary -->
+                        <div class="stockSummary ml-5">
+                            <h4>{{stock.name}}</h4>
+                            <h4>${{stock.price}}</h4>
+                            <p>${{stock.today}} Today</p>
+                        </div>
+
                         <div class="plot">
                             {% load static %}
                             <img src="{% static 'stock.png' %}" width="auto" alt="stock" />
                         </div>
-                        <ul class="nav nav-pills-dark nav-fill">
+                        <ul class="nav navbar nav-fill">
                             <li class="nav-item">
-                              <a class="nav-link active" href="#">1 Week</a>
+                                <a class="nav-link active" href="#">1 Week</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="#">1 Month</a>
+                                <a class="nav-link" href="#">1 Month</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="#">1 Year</a>
+                                <a class="nav-link" href="#">1 Year</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="#">All Time</a>
+                                <a class="nav-link" href="#">All Time</a>
                             </li>
                         </ul>
                         {% endif %}
                         {% if showPortfolio == True  %}
+                        <!-- Investment -->
+                        <div id="portValue" class="ml-5">
+                            <h4>Portfolio Value</h4>
+                            <h4>${{investValue}}</h4>
+                        </div>
                         <div class="plot">
                             {% load static %}
-                            <img src="{% static 'portfolio.png' %}" width="auto" alt="portfolio" />
+                            <img src="{% static 'stock.png' %}" width="auto" alt="portfolio" />
                         </div>
-                        <ul class="nav nav-pills nav-fill">
+                        <ul class="nav nav-pills-dark nav-fill">
                             <li class="nav-item">
-                              <a class="nav-link active" href="#">1 Week</a>
+                                <a class="nav-link active" href="#">1 Week</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="#">1 Month</a>
+                                <a class="nav-link" href="#">1 Month</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="#">1 Year</a>
+                                <a class="nav-link" href="#">1 Year</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">All Time</a>
@@ -122,54 +134,54 @@
                         {% endif %}
 
                     </div>
-                    <div class="col-5">
+                    <div class="col-5">                        
                         {% if showPortfolio == True  %}
                         <!-- Portfolio Table -->
-                        <table class="table table-hover ">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Symbol</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Shares</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for stock in stocks %}
-                                <tr>
-                                    <td>{{stock.symbol}}</td>
-                                    <td>{{stock.name}}</td>
-                                    <td>{{stock.shares}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <h5>Stocks</h5>
+                        <div class="list-group">
+                            {% for stock in stocks %}
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                  <h5 class="mb-1">{{stock.symbol}}</h5>
+                                  <small class="text-muted">{{stock.name}}</small>
+                                </div>
+                                <p class="mb-1">{{stock.shares}} shares</p>
+                            </a>
+                            {% endfor %}
+                        </div>
                         {% endif %}
 
                         <!-- Stock Info -->
                         {% if showStock == True  %}
-                        <div class="card border-secondary bg-light mb-3 " id="stockOutput"
-                            style="max-width: 25rem;">
+                        <div class="card border-secondary bg-light mb-3 " id="stockOutput" style="max-width: 25rem;">
                             <div class="card-header" id="stockSymbol">{{stock.symbol}}</div>
                             <div class="card-body">
                                 <h4 class="card-title" id="stockName">{{stock.name}}</h4>
-                                <h5 class="card-text">Price: $<span id="stockPrice">{{stock.price}}</span></h5>
-                                <p class="card-text">Today: $<span id="stockToday">{{stock.today}}</span></p>
-                                <!-- Make green (positive) or red (negative) -->
-                                <p class="card-text">High: $<span id="stockHigh">{{stock.high}}</span></p>
-                                <!-- Make green-->
+                                <h5 class="card-subtitle">Price $<span id="stockPrice">{{stock.price}}</span></h5>
+                                <p class="card-text">Today $<span id="stockToday" {{todayColor}}>{{stock.today}}</span></p>
+                                <p class="card-text">High $<span id="stockHigh">{{stock.high}}</span></p>
                                 <p class="card-text">Low: $<span id="stockLow">{{stock.low}}</span></p>
-                                <!-- Make red -->
-                                <p class="card-text">Volume: $<span id="stockLow">{{stock.low}}</span></p>
-                                <!-- Make red -->
+                                <p class="card-text">52 Week High: $<span>{{stock.fiftyTwoHigh}}</span></p>
+                                <p class="card-text">52 Week Low: $<span">{{stock.fiftyTwoLow}}</span></p>
+                                <p class="card-text">Market Cap: $<span>{{stock.marketCap}}</span></p>
+                                <p class="card-text">Volume: <span>{{stock.volume}}</span></p>
+                                <!-- Trade Form -->
+                                <form id="tradeStock">
+                                    <div class="form-group">
+                                        <label for="stockShares">Shares: </label>
+                                        <input type="number" id="stockShares" placeholder="0">
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col">
+                                            <button class="btn btn-success btn-block" id="buyBtn" type="button">Buy</button>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-danger btn-block" id="sellBtn" type="button">Sell</button>
+                                        </div>
+                                    </div>
+                                    <div id="result"></div>
+                                </form>
                             </div>
-                        </div>
-                        <!-- Trade Form -->
-                        <div id="tradeStock">
-                            <label for="stockShares">Shares: </label>
-                            <input type="number" id="stockShares" placeholder="0">
-                            <button class="btn btn-success" id="buyBtn" type="button">BUY</button>
-                            <button class="btn btn-danger" id="sellBtn" type="button">SELL</button>
-                            <div id="result"></div>
                         </div>
                         {% endif %}
                     </div>

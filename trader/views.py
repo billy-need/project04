@@ -17,14 +17,19 @@ def home(request):
     balance = account.balance
     username = account.username
     stocks = Stock.getStocks()
+    investValue = calcValue()
     showPortfolio = True
     showStock = False
     showPlot = False
     if request.method == "POST":
         tickerSymbol = request.POST.get('ticker')
-        startDate = getDate('week')
+        startDate = getDate('year')
         endDate = getDate()
         stock = getStockData(tickerSymbol, startDate, endDate)
+        if stock['today'] < 0:
+            todayColor = 'style=color:--red;'
+        else:
+            todayColor = 'style=color:green;'
         showPortfolio = False
         showStock = True
         showPlot = True
@@ -35,18 +40,35 @@ def home(request):
             'showStock': showStock, 
             'showPlot': showPlot, 
             'showPortfolio' : showPortfolio, 
-            'stock': stock
+            'stock': stock,
+            'todayColor': todayColor
             }
         return render(request, 'trader/home.html', context)
     context = {
         'username': username, 
         'balance': round(balance, 2), 
+        'investValue': round(investValue,2),
         'stocks': stocks, 
         'showStock': showStock,
         'showPlot':  showPlot,
         'showPortfolio' : showPortfolio
         }
     return render(request, 'trader/home.html', context)
+
+def calcValue():
+    #stocks = Stock.getStocks()
+
+    transactions = Transaction.getTransactions()
+    value = 0
+    total = 0
+
+    for tran in transactions:
+        value = tran.price * tran.shares
+        total += value
+    
+    return total
+
+        
 
 def account(request):
     account = Account.getAccount(1)
@@ -55,8 +77,9 @@ def account(request):
     password = account.password
     firstname = account.first_name
     lastname = account.last_name
+    investValue = calcValue()
     transactions = Transaction.getTransactions()
-    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2), 'transactions': transactions}
+    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2), 'transactions': transactions, 'investValue': investValue}
     return render(request, 'trader/account.html', context)
 
 def resetAccount(request):

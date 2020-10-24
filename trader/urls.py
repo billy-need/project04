@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home),
     path('account', views.account),
-    path('getstock', views.home),
+    path('stock', views.home),
     #path('ajax/getStockData', views.getStockData)
     path('transactions', Transaction.getTransactions),
     path('buystock', views.buyStock),

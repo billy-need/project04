@@ -49,19 +49,19 @@ class Stock(models.Model):
             print('Error:', e)
             
 
-    def deleteStock(symbol, shares):
-        stocks = Stock.getStocks()
-        for stock in stocks:
-            if symbol == stock.symbol:
-                if stock.shares > int(float(shares)):
-                    stock.shares -= int(float(shares))
-                    stock.save()
-                elif stock.shares == int(float(shares)):
-                    stock.delete()
-                else:
-                    return str('Cannot sell more than you own')
+    def deleteStock(ticker, shares):
+        count = Stock.objects.filter(symbol=ticker).count()
+        if count >= 1:
+            stock = Stock.objects.get(symbol=ticker)
+            if stock.shares > int(float(shares)):
+                stock.shares -= int(float(shares))
+                stock.save()
+            elif stock.shares == int(float(shares)):
+                stock.delete()
             else:
-                return str('You do not own this stock')
+                return str('Cannot sell more than you own')
+        else:
+            return str('You own no shares')
 
     def deleteAllStock():
         stocks = Stock.getStocks()
