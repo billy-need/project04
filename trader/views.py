@@ -17,58 +17,48 @@ def home(request):
     balance = account.balance
     username = account.username
     stocks = Stock.getStocks()
-    investValue = calcValue()
-    showPortfolio = True
-    showStock = False
-    showPlot = False
-    if request.method == "POST":
-        tickerSymbol = request.POST.get('ticker')
-        startDate = getDate('year')
-        endDate = getDate()
-        stock = getStockData(tickerSymbol, startDate, endDate)
-        if stock['today'] < 0:
-            todayColor = 'style=color:--red;'
-        else:
-            todayColor = 'style=color:green;'
-        showPortfolio = False
-        showStock = True
-        showPlot = True
-        context = {
-            'username': username, 
-            'balance': round(balance, 2), 
-            'stocks': stocks, 
-            'showStock': showStock, 
-            'showPlot': showPlot, 
-            'showPortfolio' : showPortfolio, 
-            'stock': stock,
-            'todayColor': todayColor
-            }
-        return render(request, 'trader/home.html', context)
+    investValue = portValue()
     context = {
         'username': username, 
         'balance': round(balance, 2), 
         'investValue': round(investValue,2),
-        'stocks': stocks, 
-        'showStock': showStock,
-        'showPlot':  showPlot,
-        'showPortfolio' : showPortfolio
+        'stocks': stocks
         }
     return render(request, 'trader/home.html', context)
 
-def calcValue():
-    #stocks = Stock.getStocks()
+def stock(request, symbol):
+    account = Account.getAccount(1)
+    balance = account.balance
+    username = account.username
+    startDate = getDate('year')
+    endDate = getDate()
+    stock = getStockData(symbol, startDate, endDate)
+    if stock['today'] < 0:
+        todayColor = 'style=color:--red;'
+    else:
+        todayColor = 'style=color:green;'
+    context = {
+        'username': username, 
+        'balance': round(balance, 2), 
+        'stock': stock,
+        'todayColor': todayColor
+        }
+    return render(request, 'trader/stock.html', context)
 
+def search(request):
+    if request.method == "POST":
+        tickerSymbol = request.POST.get('ticker')
+        return HttpResponseRedirect('/stock/{}'.format(tickerSymbol))
+
+def portValue():
+    #stocks = Stock.getStocks()
     transactions = Transaction.getTransactions()
     value = 0
     total = 0
-
     for tran in transactions:
         value = tran.price * tran.shares
         total += value
-    
     return total
-
-        
 
 def account(request):
     account = Account.getAccount(1)
@@ -77,9 +67,17 @@ def account(request):
     password = account.password
     firstname = account.first_name
     lastname = account.last_name
-    investValue = calcValue()
+    investValue = portValue()
     transactions = Transaction.getTransactions()
-    context = {'username': username, 'firstname': firstname, 'lastname': lastname, 'password': password, 'balance': round(balance, 2), 'transactions': transactions, 'investValue': investValue}
+    context = {
+        'username': username, 
+        'firstname': firstname, 
+        'lastname': lastname, 
+        'password': password, 
+        'balance': round(balance, 2), 
+        'transactions': transactions, 
+        'investValue': investValue
+        }
     return render(request, 'trader/account.html', context)
 
 def resetAccount(request):

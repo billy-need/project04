@@ -9,8 +9,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home),
     path('account', views.account),
-    path('stock', views.home),
-    #path('ajax/getStockData', views.getStockData)
+    path('stock', views.search),
+    path('stock/<symbol>', views.stock),
     path('transactions', Transaction.getTransactions),
     path('buystock', views.buyStock),
     path('sellstock', views.sellStock),

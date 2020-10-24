@@ -43,13 +43,14 @@
                         <a href="/"><img src="{% static 'logo.png' %}" height="50px" width="auto" alt="Logo" /></a>
                     </div>
                     <!-- Toggle button -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks"
+                        aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
                 <!-- Nav Links -->
                 <div class="collapse navbar-collapse" id="navbarLinks">
-                        <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link" aria-haspopup="true" href="/">Portfolio</a>
                         </li>
@@ -60,22 +61,22 @@
                     <!-- Search Form -->
                     <form class="form-inline mr-auto" id="search" role="search" action="/stock" method="POST">
                         {% csrf_token %}
-                        <input class="form-control mr-sm-1" type="text" id="stockInput" name="ticker" placeholder="Symbol..." />
-                        <button class="btn btn-outline-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit" name="submit">Search</button>
+                        <input class="form-control mr-sm-1" type="text" id="stockInput" name="ticker"
+                            placeholder="Symbol..." />
+                        <button class="btn btn-outline-primary my-2 my-sm-0 ml-2" id="searchBtn" type="submit"
+                            name="submit">Search</button>
                     </form>
                     <!-- User Login -->
                     <div class="navbar-text">
-                        <span>Welcome, </span> 
-                        <span id="username">{{username}}</span> 
+                        <span>Welcome, </span>
+                        <span id="username">{{username}}</span>
                         <span id="logout"><a href="">Logout</a></span>
-                    </div> 
+                    </div>
                 </div>
             </nav>
-
             <!-- Page Content -->
             <div class="container">
                 <div class="row justify-content-center">
-
                     <!-- Left Side Col -->
                     <div class="col-6">
                         <!-- Investment -->
@@ -114,12 +115,11 @@
                             <div class="row">
                                 <div class="col">
                                     <!-- <a href="" class="btn btn-secondary" role="button" aria-disabled="true">Edit Details</a> -->
-                                    <a href="/resetaccount" class="btn btn-danger" role="button" aria-disabled="true">Reset Account</a>                            
+                                    <a href="/resetaccount" class="btn btn-danger" role="button" aria-disabled="true">Reset Account</a>
                                 </div>
                             </div>
                         </form>
                     </div>
-
                     <!-- Right Side Col -->
                     <div class="col-6">
                         <!-- Investment -->
@@ -134,11 +134,11 @@
                                     <h5>Transaction History</h5>
                                 </tr>
                                 <tr>
-                                    <th scope="col">Order</th>
-                                    <th scope="col">Stock</th>
-                                    <th scope="col">Shares</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Date</th>
+                                    <th class="text-muted" scope="col">Order</th>
+                                    <th class="text-muted" scope="col">Stock</th>
+                                    <th class="text-muted" scope="col">Shares</th>
+                                    <th class="text-muted" scope="col">Price</th>
+                                    <th class="text-muted" scope="col">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,7 +157,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Footer Wrap -->
         <div id="footer">
             <footer>
@@ -165,7 +164,6 @@
                 </div>
             </footer>
         </div>
-
     </div>
 </body>
 
