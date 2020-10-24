@@ -110,6 +110,7 @@ def buyStock(request):
             if balance >= int(float(price)) * int(float(shares)):
                 account.balance = balance - int(float(price)) * int(float(shares))
                 account.save()
+                newbalance = account.balance
                 count = Stock.objects.filter(symbol=symbol).count()
                 owned = 0
                 if count >= 1:
@@ -124,6 +125,7 @@ def buyStock(request):
                 resp['result'] = 'Success'
                 resp['message'] = 'Successfully ordered {} shares of {}!'.format(shares, symbol)
                 resp['owned'] = owned
+                resp['balance'] = round(newbalance, 2)
             else:
                 resp['result'] = 'Failure'
                 resp['message'] = 'Insufficent Funds'
@@ -158,11 +160,13 @@ def sellStock(request):
                     elif stock.shares == int(float(shares)):
                         stock.delete()
                     account.balance = balance + int((float(price)) * int(float(shares)))
+                    newbalance = account.balance
                     account.save()
                     Transaction.createTransaction('Sell', symbol, shares, price, accountId = 1)
                     resp['result'] = 'Success'
                     resp['message'] = 'Successfully sold {} shares of {}!'.format(shares, symbol)
                     resp['owned'] = owned
+                    resp['balance'] = round(newbalance, 2)
                 else:
                     resp['result'] = 'Failure'
                     resp['message'] = 'Cannot sell more shares than you own.'

@@ -102,6 +102,7 @@
                         </ul>
                     </div>
                     <div class="col-5">
+                        {% if stocks %}
                         <!-- Portfolio List -->
                         <h5>Stocks</h5>
                         <div class="list-group">
@@ -115,6 +116,7 @@
                             </a>
                             {% endfor %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

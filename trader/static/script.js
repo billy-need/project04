@@ -100,6 +100,7 @@ $(document).ready(() => {
                 $("#stockShares").val("")
                 $("#result").text(resp.message)
                 $("#sharesOwned").text(resp.owned)
+                $("#balance").text(resp.balance)
                 
             },
             error: function (resp) {
@@ -132,6 +133,7 @@ $(document).ready(() => {
                 $("#stockShares").val("")
                 $("#result").text(resp.message)
                 $("#sharesOwned").text(resp.owned)
+                $("#balance").text(resp.balance)
             },
             error: function (resp) {
                 console.log("Error: " + resp)
