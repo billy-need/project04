@@ -40,15 +40,6 @@ class Stock(models.Model):
         stocks = Stock.objects.all()
         return stocks
 
-    def createStock( ticker, name, shares, accountId):
-        count = Stock.objects.filter(symbol=ticker).count()
-        if count >= 1:
-            stock = Stock.objects.get(symbol=ticker)
-            stock.shares += int(float(shares))
-            stock.save()
-        else:
-            Stock.objects.create(symbol=ticker, name=name, shares=shares, account_id=accountId)
-
     def deleteAllStock():
         stocks = Stock.getStocks()
         stocks.delete()

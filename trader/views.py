@@ -27,12 +27,19 @@ def home(request):
     return render(request, 'trader/home.html', context)
 
 def stock(request, symbol):
+    print("symbol=",symbol)
     account = Account.getAccount(1)
     balance = account.balance
     username = account.username
     startDate = getDate('year')
     endDate = getDate()
     stock = getStockData(symbol, startDate, endDate)
+    count = Stock.objects.filter(symbol=symbol).count()
+    if count >= 1:
+        ownedStock = Stock.objects.get(symbol=symbol)
+        shares = ownedStock.shares
+    else:
+        shares = 0
     if stock['today'] < 0:
         todayColor = 'style=color:--red;'
     else:
@@ -41,7 +48,8 @@ def stock(request, symbol):
         'username': username, 
         'balance': round(balance, 2), 
         'stock': stock,
-        'todayColor': todayColor
+        'todayColor': todayColor,
+        'shares': shares
         }
     return render(request, 'trader/stock.html', context)
 
@@ -102,10 +110,20 @@ def buyStock(request):
             if balance >= int(float(price)) * int(float(shares)):
                 account.balance = balance - int(float(price)) * int(float(shares))
                 account.save()
-                Stock.createStock(symbol, name, shares, accountId = 1)
+                count = Stock.objects.filter(symbol=symbol).count()
+                owned = 0
+                if count >= 1:
+                    stock = Stock.objects.get(symbol=symbol)
+                    stock.shares += int(float(shares))
+                    owned = stock.shares
+                    stock.save()
+                else:
+                    Stock.objects.create(symbol=symbol, name=name, shares=shares, account_id = 1)
+                    owned = shares
                 Transaction.createTransaction('Buy', symbol, shares, price, accountId = 1)
                 resp['result'] = 'Success'
                 resp['message'] = 'Successfully ordered {} shares of {}!'.format(shares, symbol)
+                resp['owned'] = owned
             else:
                 resp['result'] = 'Failure'
                 resp['message'] = 'Insufficent Funds'
@@ -128,22 +146,30 @@ def sellStock(request):
             symbol = data['symbol']
             shares = data['shares']
             price = data['price']
-            stock = Stock.getStock(symbol)
-            if stock.shares >= int(float(shares)):
-                if stock.shares > int(float(shares)):
-                    stock.shares -= int(float(shares))
-                    stock.save()
-                elif stock.shares == int(float(shares)):
-                    stock.delete()
-                account.balance = balance + int((float(price)) * int(float(shares)))
-                account.save()
-                Transaction.createTransaction('Sell', symbol, shares, price, accountId = 1)
-                resp['result'] = 'Success'
-                resp['message'] = 'Successfully sold {} shares of {}!'.format(shares, symbol)
+            count = Stock.objects.filter(symbol=symbol).count()
+            if count >= 1:
+                stock = Stock.getStock(symbol)
+                if stock.shares >= int(float(shares)):
+                    owned = 0
+                    if stock.shares > int(float(shares)):
+                        stock.shares -= int(float(shares))
+                        owned = stock.shares
+                        stock.save()
+                    elif stock.shares == int(float(shares)):
+                        stock.delete()
+                    account.balance = balance + int((float(price)) * int(float(shares)))
+                    account.save()
+                    Transaction.createTransaction('Sell', symbol, shares, price, accountId = 1)
+                    resp['result'] = 'Success'
+                    resp['message'] = 'Successfully sold {} shares of {}!'.format(shares, symbol)
+                    resp['owned'] = owned
+                else:
+                    resp['result'] = 'Failure'
+                    resp['message'] = 'Cannot sell more shares than you own.'
             else:
                 resp['result'] = 'Failure'
-                resp['message'] = 'Cannot sell more shares than you own.'
-        return JsonResponse(resp)
+                resp['message'] = 'You do not own this stock.'
+            return JsonResponse(resp)
 
     except Exception as e:
         resp['result'] = 'Error'
